@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+_test*
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb

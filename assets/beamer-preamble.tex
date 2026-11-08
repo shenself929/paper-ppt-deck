@@ -1,0 +1,105 @@
+% !TEX program = xelatex
+% Paper PPT Deck — reusable preamble
+% Compile with: xelatex main.tex (twice)
+% No cover / TOC / references page. First frame is content.
+\documentclass[9pt,aspectratio=169,t]{beamer}
+
+\usetheme{metropolis}
+\metroset{sectionpage=none, subsectionpage=none, progressbar=frametitle,
+          block=fill, numbering=none}
+
+% ---------- academic blue palette ----------
+\usepackage{xcolor}
+\definecolor{acblue}{HTML}{1B4E9B}
+\definecolor{acblue2}{HTML}{4A7BC8}
+\definecolor{aclight}{HTML}{EAF1FB}
+\definecolor{acgold}{HTML}{C8922A}
+\definecolor{acgray}{HTML}{5A5A5A}
+\definecolor{acred}{HTML}{B03A2E}
+\definecolor{acgreen}{HTML}{2E7D5B}
+\setbeamercolor{frametitle}{fg=white, bg=acblue}
+\setbeamercolor{progress bar}{fg=acblue, bg=aclight}
+\setbeamercolor{block title}{fg=acblue, bg=aclight}
+\setbeamercolor{block body}{bg=aclight!50}
+\setbeamercolor{alerted text}{fg=acgold}
+\setbeamercolor{normal text}{fg=black!88, bg=white}
+\setbeamerfont{frametitle}{size=\large, series=\bfseries}
+\setbeamerfont{block title}{size=\scriptsize, series=\bfseries}
+\setbeamerfont{block body}{size=\scriptsize}
+
+% ---------- Chinese ----------
+\usepackage{xeCJK}
+\setCJKmainfont{Microsoft YaHei}[BoldFont=Microsoft YaHei Bold]
+\setCJKsansfont{Microsoft YaHei}[BoldFont=Microsoft YaHei Bold]
+\setCJKmonofont{SimSun}
+\setsansfont{Segoe UI}
+
+% ---------- math / tables / figures / code ----------
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{array, multirow}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc, fit, backgrounds,
+                decorations.pathreplacing}
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\scriptsize,
+  keywordstyle=\color{acblue}\bfseries,
+  commentstyle=\color{acgray}\itshape,
+  stringstyle=\color{acgold},
+  numbers=none, frame=none, aboveskip=2pt, belowskip=2pt,
+  columns=fullflexible, keepspaces=true, breaklines=true,
+  showstringspaces=false
+}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator{\quant}{quant}
+\DeclareMathOperator{\diag}{diag}
+\newcommand{\Hinv}{H^{-1}}
+\newcommand{\hl}[1]{\textbf{\textcolor{acgold}{#1}}}
+\newcommand{\good}[1]{\textcolor{acgreen}{#1}}
+\newcommand{\bad}[1]{\textcolor{acred}{#1}}
+\newcommand{\src}[1]{\textcolor{black!45}{\tiny #1}}
+\graphicspath{{figures/}{../latex源码/}}
+\newcommand{\ptag}[1]{{\tiny\colorbox{aclight}{\textcolor{acblue}{\ #1\ }}}}
+
+% ---------- integrated takeaway blocks ----------
+% Do NOT use a separate bottom explanation band. Use 1-2 takeaway blocks
+% with short judgment titles, placed in the content flow.
+\newenvironment{takeaway}[1]
+  {\begin{block}{#1}}
+  {\end{block}}
+
+% ---------- shared TikZ styles ----------
+\tikzset{
+  nbox/.style={draw=acblue, fill=aclight, rounded corners=2pt, align=center,
+               inner sep=3pt, font=\sffamily\footnotesize},
+  gbox/.style={draw=acgold, fill=acgold!15, rounded corners=2pt, align=center,
+               inner sep=3pt, font=\sffamily\footnotesize},
+  rbox/.style={draw=acred!75, fill=acred!8, rounded corners=2pt, align=center,
+               inner sep=3pt, font=\sffamily\footnotesize},
+  gbox2/.style={draw=acgreen!80, fill=acgreen!8, rounded corners=2pt, align=center,
+               inner sep=3pt, font=\sffamily\footnotesize},
+  arr/.style={-{Stealth[length=1.8mm]}, thick, acblue},
+  arrh/.style={-{Stealth[length=1.8mm]}, thick, acgold},
+  lab/.style={font=\sffamily\tiny, text=acgray, align=center},
+}
+
+\title{Paper Title}
+\author{}
+\date{}
+
+\setlength{\abovedisplayskip}{2pt}
+\setlength{\belowdisplayskip}{2pt}
+\setlength{\abovedisplayshortskip}{0pt}
+\setlength{\belowdisplayshortskip}{0pt}
+\setlength{\smallskipamount}{2pt}
+\setlength{\medskipamount}{3pt}
+\setlength{\parskip}{0pt}
+\AtBeginDocument{\linespread{0.95}\selectfont}
+
+\begin{document}
+% \input{frames}
+% \end{document}
