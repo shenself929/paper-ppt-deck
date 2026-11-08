@@ -9,8 +9,9 @@ A reusable skill that turns a paper (PDF or LaTeX source) into a dense, readable
 ## What it produces
 
 - A 16:9 Beamer deck with an academic blue style, no cover / TOC / references page.
-- Every slide ends with an **unlabeled** light-blue explanatory paragraph, so readers can understand the slide without a presenter.
-- Method and algorithm pages dominate; experiments are compressed to conclusions, not full tables.
+- Every slide carries its explanation in **1–2 titled `takeaway` blocks** placed in the content flow, so readers can understand the slide without a presenter.
+- Method and algorithm pages are **diagram-first**: a five-stage overview pipeline, a two-lane data-flow diagram, and a per-layer loop diagram, with formulas kept to one block per page.
+- Experiments are compressed to **at most 2 pages**: one ablation table, one main-results table, one-line conclusions.
 - A speaker script mapped 1:1 to the PDF pages, written in spoken Chinese, explaining terms, formulas, and numbers so listeners can follow without seeing the slides.
 - Optional lineage mode: if and only if the user explicitly asks for a multi-paper relationship report, it adds a “one trunk + branches” section before the main paper.
 
@@ -67,7 +68,8 @@ paper-ppt-deck/
 │   ├── language-passes.md       # anti-defensive → academic-humanizer checklist
 │   └── test-prompts.md          # three realistic test prompts
 ├── assets/
-│   ├── beamer-preamble.tex      # reusable preamble with the unlabeled explain box
+│   ├── beamer-preamble.tex      # reusable preamble with the takeaway block environment
+│   ├── flow-snippets.tex        # TikZ skeletons: pipeline / two-lane flow / loop / knob
 │   ├── script-template.md       # speaker-script skeleton
 │   └── metropolis/              # Metropolis theme files (CC BY-SA 4.0)
 └── scripts/
@@ -92,8 +94,9 @@ The Metropolis theme is bundled under `assets/metropolis/`; if your TeX distribu
 2. **Single paper by default.** Do not fabricate a literature lineage unless the user asks for one.
 3. **Every number has a source.** A claim on a slide must point back to a table, figure, or section in the paper.
 4. **Experiments are conclusions, not tables.** Two pages are usually enough.
-5. **Language passes in order:** anti-defensive first (decide the claim), then academic-humanizer (clean the prose). Facts, numbers, and necessary boundaries are preserved.
-6. **No “讲述” label.** The bottom paragraph is part of the slide, not a speaker-note strip.
+5. **Method pages are diagram-first.** If a mechanism can be drawn as a pipeline, a two-lane flow, or a loop, draw it; a formula block is support, not the main content.
+6. **Language passes in order:** anti-defensive first (decide the claim), then academic-humanizer (clean the prose). Facts, numbers, and necessary boundaries are preserved.
+7. **No “讲述” label.** Explanations live in 1–2 titled `takeaway` blocks inside the content flow, never in a footer strip.
 
 ## License
 

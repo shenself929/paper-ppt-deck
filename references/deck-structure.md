@@ -24,15 +24,18 @@ The numbers in the left column are a reference order, not a fixed page count. Me
 | 1 | Problem and cost | one concrete number that makes the problem real | starting with a generic "deep learning is important" |
 | 2 | Why existing methods fail | 2–3 routes, each with a specific blocker | listing methods without saying where they break |
 | 3 | Problem formulation | objective, notation, assumptions, boundary | formula without reading instructions |
+| 3b | Method overview | five-stage flowchart, arrow labels, two phase braces | a formula-only overview nobody can follow |
 | 4 | Precursor method | the one method the paper builds on | explaining three precursors and losing the thread |
 | 5 | Precursor's bottleneck | 2–3 bottlenecks, each mapped to a fix | bottleneck list without consequences |
 | 6 | Fix overview | bottleneck → fix → nature (approximate/equivalent) | no distinction between approximation and equivalence |
 | 7–9 | Fixes one by one | mechanism, why correct, cost | repeating the overview without new detail |
-| 10 | Full algorithm | pseudocode, annotation, complexity | pseudocode without mapping to fixes |
-| 11 | Code correspondence | 15–25 lines, line-to-equation mapping | dumping 60 lines |
+| 10a | Data-flow diagram | two lanes: full-precision path vs quantized path, loss box | two dense formula blocks instead of a picture |
+| 10b | Per-layer loop | five steps, return arrow, freeze order | pseudocode without the loop boundary |
+| 11 | Full algorithm | pseudocode, annotation, complexity | pseudocode without mapping to fixes |
+| 12 | Code correspondence | 15–25 lines, line-to-equation mapping | dumping 60 lines |
 | 12 | Exact/approximate audit | table: step, nature, why, who challenges | hiding the approximation |
 | 13 | Engineering | runtime, memory, block strategy | treating engineering as an afterthought |
-| 14–15 | Experiment conclusions | 2 pages: accuracy + ability/deployment | full model-by-model tables |
+| 14–15 | Experiment conclusions (max 2 pages) | page 1 ablation table + one-line conclusion; page 2 main table + one-line conclusion and cost | a separate conclusion page or a full model-by-model dump |
 | 16 | Assumptions and boundaries | 4–6 assumptions, when they fail, who picks up | ending on a list of weaknesses |
 | 17 | Summary | 4 actions, 3 numbers, 1 lineage | restating the abstract |
 
@@ -103,6 +106,34 @@ Template:
 ```
 
 The old version put a single `explain` paragraph at the bottom. Do not do that: the explanation must sit in the content flow as 1–2 titled takeaway blocks, and the two blocks must not repeat each other.
+
+---
+
+## 4a. Page recipe: method overview flow
+
+Use this as the first method page, before any derivation.
+
+- One diagram: five stages and four arrows. Each arrow label names the operation and its nature, for example “二阶 Taylor”, “块对角 + 对角近似”, “连续松弛”, “退火 + 硬化”.
+- Under the chain, two braces split the flow into “改目标” (objective becomes smaller and computable) and “改变量” (0/1 → continuous → 0/1).
+- One `takeaway{读法}` explains the two lines; one `takeaway{代价}` names the approximations and points to the audit page.
+- No second formula block on this page. The diagram carries the structure; formulas come on the detail pages.
+
+## 4b. Page recipe: two-lane data flow
+
+Use this for asymmetric reconstruction, distillation, residual paths, or any mechanism where the two branches see different inputs.
+
+- Top lane: full-precision input → full-precision weight → activation → target.
+- Bottom lane: quantized input (from previous layers) → soft weight → activation → estimate.
+- Both lanes feed a loss box on the right. Label the first node of each lane with the input regime, not with a generic “x”.
+- Two takeaway blocks: why the asymmetry helps, and what it costs (usually greedy layer-wise freezing).
+
+## 4c. Page recipe: per-layer loop
+
+Use this when the algorithm runs layer by layer or block by block.
+
+- Five steps stacked vertically, with a return arrow from the last step to the first, labeled `ℓ←ℓ+1`.
+- Left 55–60% of the page for the diagram; right column for two takeaways: “只动一个量” and “逐层的代价”.
+- Put pseudocode on the next page. Do not mix the flowchart and the listing on one slide.
 
 ---
 

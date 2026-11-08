@@ -148,3 +148,78 @@ If a visual-judge agent is available, use it on the PNGs. If not, inspect the PN
 - Do not put Chinese inside `\texttt{}` unless the font supports it.
 - Use full-width punctuation in Chinese prose; use `$...$` for math.
 - Avoid em dashes in the final script; in slides, use commas or parentheses.
+
+---
+
+## 9. Silent failures in Beamer frames
+
+These fail without an error in the log. Check them before debugging the content.
+
+### 9.1 A frame body that starts with `{`
+
+Symptom: a whole table or a whole block compiles with no Error/Overfull, but is missing from the PDF.
+
+Cause: Beamer parses a leading brace group in the frame body as a grouping/overlay specification and drops it.
+
+Fix: use `\begingroup ... \endgroup` instead of `{ ... }`:
+
+```latex
+\begin{frame}{...}
+\begingroup\scriptsize
+...
+\endgroup
+\end{frame}
+```
+
+Do not write `{\scriptsize ... }` as the first thing after `\begin{frame}`.
+
+### 9.2 The last table column wraps one character per line
+
+Symptom: the last column of a `tabularx` shows two or three characters per line.
+
+Cause: the `X` column receives the leftover width, which is too small.
+
+Fix: give the last column a fixed `p{2.8cm}`, move `X` to the long-text column, or drop a non-essential column. Reduce `\tabcolsep` to 2pt before reducing the font.
+
+### 9.3 A flow diagram is 3–20pt too wide
+
+Symptom: `Overfull \hbox` at the `\end{frame}` line, diagram touches the right edge.
+
+Fix: reduce node `text width` first, then the `x=` scale. Never wrap the whole `tikzpicture` in `\resizebox`; it makes fonts inconsistent across pages.
+
+### 9.4 Source line height varies from page to page
+
+Symptom: the `\src{}` line floats at different heights, so pages look top-heavy or bottom-heavy.
+
+Fix: put `\vfill` immediately before `\src{}` in every frame.
+
+---
+
+## 10. Flowchart recipes
+
+Use `assets/flow-snippets.tex` for three copy-paste skeletons.
+
+### 10.1 Method overview pipeline
+
+- Five nodes, width 2.1–2.3cm, center spacing 2.8cm, `minimum height` 1.1–1.2cm.
+- Arrow labels above the arrows, `\sffamily\scriptsize`, 2–5 characters.
+- Under the chain, two braces: “改目标” over the modeling stages and “改变量” over the relaxation/hardening stages.
+- If the chain exceeds `\textwidth`, reduce node width to 2.0cm before shrinking the font.
+
+### 10.2 Two-lane data-flow diagram
+
+- Two rows, 1.2cm apart; each row has 3–4 nodes of 1.8–1.9cm.
+- First node of each row states the input regime: `x (FP32)` on top, `x̂ (已量化)` below.
+- A loss box on the right, 3.2cm wide, receives arrows from both lanes.
+- Use a dashed arrow from the previous-layer block into `x̂` when the point is “input already quantized”.
+
+### 10.3 Per-layer loop diagram
+
+- Five nodes stacked vertically, 1.0–1.1cm apart.
+- Last node → right → up → first node, with the label `ℓ←ℓ+1`.
+- Put the loop on the left 55–60% of the page and the two takeaway blocks on the right.
+
+### 10.4 Knob diagram for continuous relaxation
+
+- A horizontal axis with ticks at `floor` and `ceil`, a filled dot at `h(V)`, and a double arrow above labeled “0 → 1”.
+- Width 5–6cm; it fits under a formula in a 0.55 column.

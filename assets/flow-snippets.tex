@@ -1,0 +1,96 @@
+% ============================================================
+% flow-snippets.tex
+% Copy-paste TikZ skeletons for method / algorithm pages.
+% Requires the styles defined in assets/beamer-preamble.tex:
+%   nbox, gbox, gbox2, rbox, arr, lab
+% and \usetikzlibrary{arrows.meta,positioning,calc,decorations.pathreplacing}
+% ============================================================
+
+
+% ------------------------------------------------------------
+% A. Method overview pipeline (5 stages + two phase braces)
+% Use for: "task loss -> QUBO -> local MSE -> soft relaxation -> integer weights"
+% ------------------------------------------------------------
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm,every node/.style={font=\sffamily\scriptsize}]
+  \node[nbox,text width=2.10cm,minimum height=1.10cm] (a) at (0,0)    {Stage 1\\one line};
+  \node[nbox,text width=2.10cm,minimum height=1.10cm] (b) at (2.80,0) {Stage 2\\one line};
+  \node[nbox,text width=2.10cm,minimum height=1.10cm] (c) at (5.60,0) {Stage 3\\one line};
+  \node[gbox,text width=2.10cm,minimum height=1.10cm] (d) at (8.40,0) {Stage 4\\one line};
+  \node[gbox2,text width=2.10cm,minimum height=1.10cm] (e) at (11.20,0){Stage 5\\one line};
+  \draw[arr] (a)--(b);
+  \draw[arr] (b)--(c);
+  \draw[arr] (c)--(d);
+  \draw[arr] (d)--(e);
+  \node[lab,above] at (1.40,0.60) {step 1};
+  \node[lab,above] at (4.20,0.60) {step 2};
+  \node[lab,above] at (7.00,0.60) {step 3};
+  \node[lab,above] at (9.80,0.60) {step 4};
+  \draw[decorate,decoration={brace,amplitude=3pt,mirror},draw=acblue2,thick]
+        (-1.05,-0.75) -- (6.65,-0.75)
+        node[midway,below=4pt,font=\sffamily\scriptsize,text=acblue]{phase 1: change the objective};
+  \draw[decorate,decoration={brace,amplitude=3pt,mirror},draw=acgold,thick]
+        (7.35,-0.75) -- (12.25,-0.75)
+        node[midway,below=4pt,font=\sffamily\scriptsize,text=acgold]{phase 2: change the variable};
+\end{tikzpicture}
+\end{center}
+
+
+% ------------------------------------------------------------
+% B. Two-lane data-flow diagram
+% Use for: asymmetric reconstruction, distillation, residual paths
+% ------------------------------------------------------------
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm,every node/.style={font=\sffamily\scriptsize}]
+  \node[nbox,text width=1.85cm,minimum height=0.62cm] (x)  at (0,1.12)   {input A};
+  \node[nbox,text width=1.85cm,minimum height=0.62cm] (w)  at (2.65,1.12){weight A};
+  \node[nbox,text width=1.25cm,minimum height=0.62cm] (f1) at (5.00,1.12){$f_a$};
+  \node[gbox2,text width=1.85cm,minimum height=0.62cm] (y)  at (7.30,1.12){target};
+  \node[nbox,text width=1.85cm,minimum height=0.62cm] (xh) at (0,-0.12)   {input B};
+  \node[gbox,text width=1.85cm,minimum height=0.62cm] (wt) at (2.65,-0.12){weight B};
+  \node[nbox,text width=1.25cm,minimum height=0.62cm] (f2) at (5.00,-0.12){$f_a$};
+  \node[gbox2,text width=1.85cm,minimum height=0.62cm] (y2) at (7.30,-0.12){estimate};
+  \node[rbox,text width=3.30cm,minimum height=1.00cm] (loss) at (10.90,0.50)
+        {$\|\mathrm{target}-\mathrm{estimate}\|_F^2$\\$+\;\lambda\,\mathrm{reg}$};
+  \draw[arr] (x)--(w);   \draw[arr] (w)--(f1);  \draw[arr] (f1)--(y);
+  \draw[arr] (xh)--(wt); \draw[arr] (wt)--(f2); \draw[arr] (f2)--(y2);
+  \draw[arr] (y)--(loss);  \draw[arr] (y2)--(loss);
+  \node[lab,above] at (3.65,1.68) {lane A: full precision};
+  \node[lab,below] at (3.65,-0.50) {lane B: quantized input / soft weight};
+\end{tikzpicture}
+\end{center}
+
+
+% ------------------------------------------------------------
+% C. Per-layer loop (5 steps, return arrow)
+% Put in a 0.56-0.58 column; use takeaway blocks in the right column.
+% ------------------------------------------------------------
+\begin{tikzpicture}[x=1cm,y=1cm,every node/.style={font=\sffamily\scriptsize}]
+  \node[nbox,text width=6.10cm,minimum height=0.70cm] (a) at (0,0)    {\textbf{1. sample} input for this layer};
+  \node[nbox,text width=6.10cm,minimum height=0.70cm] (b) at (0,-1.05){\textbf{2. fix} scale / grid};
+  \node[nbox,text width=6.10cm,minimum height=0.70cm] (c) at (0,-2.10){\textbf{3. init} the free variable};
+  \node[gbox,text width=6.10cm,minimum height=0.82cm] (d) at (0,-3.22){\textbf{4. optimise} soft weights $\rightarrow$ loss $\rightarrow$ update};
+  \node[gbox2,text width=6.10cm,minimum height=0.70cm] (e) at (0,-4.34){\textbf{5. harden} and freeze};
+  \draw[arr] (a)--(b);
+  \draw[arr] (b)--(c);
+  \draw[arr] (c)--(d);
+  \draw[arr] (d)--(e);
+  \draw[arr] (e.east) -- ++(0.80,0) |- (a.east);
+  \node[font=\sffamily\tiny,text=acgray,anchor=west] at (4.00,-2.15) {$\ell\leftarrow\ell+1$};
+\end{tikzpicture}
+
+
+% ------------------------------------------------------------
+% D. Knob diagram for continuous relaxation
+% Place under a formula in a 0.55 column.
+% ------------------------------------------------------------
+\begin{tikzpicture}[x=0.82cm,y=1cm]
+  \draw[line width=1.1pt,acblue!70] (0,0)--(6,0);
+  \draw[line width=1.1pt,acblue] (0,-0.12)--(0,0.12);
+  \draw[line width=1.1pt,acblue] (6,-0.12)--(6,0.12);
+  \node[below,font=\tiny] at (0,-0.15) {floor};
+  \node[below,font=\tiny] at (6,-0.15) {ceil};
+  \fill[acgold] (2.0,0) circle (1.8pt);
+  \node[above,font=\tiny,text=acgold] at (2.0,0.10) {$h(\mathbf{V})$};
+  \draw[<->,gray,thin] (0,0.52)--(6,0.52) node[midway,above,font=\tiny]{continuous knob from 0 to 1};
+\end{tikzpicture}

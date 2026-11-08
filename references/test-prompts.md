@@ -37,3 +37,15 @@ Expected:
 - Replaces bullet-only pages with prose explanations.
 - Compresses experiment pages to conclusions.
 - Expands the script with terminology and formula explanations.
+
+## 4. Revise a deck: method first, experiments brief
+
+> 修改一下 PPT，把方法算法讲清楚，可以画一些流程图直观理解，实验直接说明结论就行了，不用大片讲结论。
+
+Expected:
+
+- Adds a method overview flowchart: five stages, four arrows, two phase braces (“改目标 / 改变量”).
+- Adds at least one two-lane data-flow diagram and one per-layer loop diagram where the paper has them.
+- Keeps one formula block per page; the diagram carries the mechanism, the formula only supports it.
+- Compresses experiments to no more than 2 pages: one ablation table and one main-results table, each with a one-line conclusion. No large conclusion block, no separate data/cost page.
+- Rebuilds the speaker script to the new page count, 1:1 with the PDF.
